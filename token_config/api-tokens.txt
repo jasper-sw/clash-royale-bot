@@ -1,0 +1,3 @@
+my_token=[your supercell clash royale api token]
+
+my_other_token=[your other supercell clash royale api token]
