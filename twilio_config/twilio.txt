@@ -1,3 +1,0 @@
-SID: [your twilio SID]
-TOKEN: [your twilio Token]
-FROM: [your desired from number]
