@@ -2,8 +2,8 @@
 .idea/
 token_config
 twilio_config
-token_config/api-tokens.txt
-twilio_config/twilio.txt
+api-tokens.txt
+twilio.txt
 
 
 # Byte-compiled / optimized / DLL files
