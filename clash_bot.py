@@ -1,5 +1,4 @@
 import random
-import send_text
 
 
 class ClashBot:
