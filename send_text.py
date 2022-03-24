@@ -3,7 +3,7 @@ from twilio.rest import Client
 
 # a class to send texts to phone numbers
 class SmsAlert:
-    recipient: str
+    recipient: str = None
     sender: str
     body: str
     sid: str
@@ -42,8 +42,6 @@ class SmsAlert:
             return False
         if self.sender == "":
             return False
-        if self.recipient == "":
-            return False
         if self.token == "":
             return False
 
@@ -59,12 +57,12 @@ class SmsAlert:
                     self.token = line_arr[1]
                 if line_arr[0] == 'FROM:':
                     self.sender = line_arr[1]
-                if line_arr[0] == 'TO:':
-                    self.recipient = line_arr[1]
                 if self.fully_configured():
                     return
 
     def send_message(self, message):
+        if self.recipient is None:
+            raise SystemExit("SmsAlert: ERROR: You forgot to set the text message recipient!")
         sms_client = Client(self.sid, self.token)
         sms_client.messages.create(
             to=self.recipient,
