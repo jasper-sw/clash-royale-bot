@@ -7,7 +7,7 @@ https://developer.clashroyale.com/#/documentation
 # Requirements
 - a supercell clash royale developer account and api token is needed to use this bot, you can make one for free at https://developer.clashroyale.com
 - a twilio account, SID, token, and from number is also required if you want to send text messages to friends in response to in game events. You can create a free trial account to send texts at https://www.twilio.com/
-- ensure you have python installed on your local system
+- ensure you have python installed on the system where you intend to run the bot
 # Setup and configuration
 - clone this repo
 - install the dependencies by running:
