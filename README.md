@@ -25,3 +25,10 @@ FROM: [your twilio from number]
   {"person1": {"cell_number": [number1],"tag": "[clash royale tag1]"},"person2": {"cell_number":  [number2],"tag": "[clash royale tag2]"},"person3":{"cell_number": [number3],"tag":"[clash royale tag3]"}}
 ```
 You can include as many people as you'd like to annoy here but please be mindful of requests and bandwidth to the supercell api.
+
+## Final step
+- with configuration complete just run navigate to the root directory and run:
+```
+python3 main.py
+```
+This will start the bot and leave it running until you kill the process.
