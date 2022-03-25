@@ -24,7 +24,7 @@ for person in people_dict.keys():
 not_done = True
 print("Starting ClashBot")
 while not_done:
-    time.sleep(1)
+    time.sleep(3)
 
     for homie in people:
         time.sleep(1)
