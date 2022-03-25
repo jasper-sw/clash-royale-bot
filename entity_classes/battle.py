@@ -1,4 +1,6 @@
 from entity_classes.player import Player
+import datetime
+from dateutil import tz
 
 
 class Battle:
@@ -67,6 +69,46 @@ class Battle:
     def __repr__(self):
         return self.__str__()
 
+    def get_player_crowns(self, player_tag: str):
+        all_battle_stats = []
+        all_battle_stats.extend(self.team_battle_stats)
+        all_battle_stats.extend(self.opponent_battle_stats)
+        for entry in all_battle_stats:
+            if entry["tag"] == player_tag:
+                return entry["crowns"]
 
+        return None
 
+    def get_player_team_crowns(self):
+        total_crowns = 0
+        for entry in self.team_battle_stats:
+            total_crowns += entry["crowns"]
+        return total_crowns
+
+    def get_opponent_team_crowns(self):
+        total_crowns = 0
+        for entry in self.opponent_battle_stats:
+            total_crowns += entry["crowns"]
+        return total_crowns
+
+    def get_battle_time(self):
+        return datetime.datetime.strptime(self.battle_time, "%Y%m%dT%H%M%S.%fZ")
+
+    def get_battle_time_12_hour_local(self):
+        from_zone = tz.gettz('UTC')
+        to_zone = tz.tzlocal()
+        battle_time = datetime.datetime.strptime(self.battle_time, "%Y%m%dT%H%M%S.%fZ")
+        battle_time = battle_time.replace(tzinfo=from_zone)
+        battle_time = battle_time.astimezone(to_zone)
+        battle_time = battle_time.strftime("%I:%M %p")
+        return battle_time
+
+    def get_team_win_status(self):
+        player_team_crowns = self.get_player_team_crowns()
+        opponent_team_crowns = self.get_opponent_team_crowns()
+
+        if player_team_crowns > opponent_team_crowns:
+            return True
+        else:
+            return False
 

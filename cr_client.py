@@ -1,5 +1,6 @@
 import requests.utils
 from requests.structures import CaseInsensitiveDict
+from entity_classes.battle import Battle
 from dateutil import parser
 import datetime
 from datetime import datetime, timezone
@@ -21,7 +22,7 @@ class CrClient:
     # characters to remove from api tokens
     bad_token_chars = ['\n', '\r']
 
-    def __init__(self, api_token_file: str = None, api_token: str = None, player_tag: str = None):
+    def __init__(self, api_token_file: str = None, api_token: str = None):
         if (api_token_file is None) and (api_token is None):
             raise SystemExit("CrClient: ERROR: You must supply either an api_token_file or an api_token! "
                              "Both were None")
@@ -34,8 +35,6 @@ class CrClient:
         # ensure api token is cleaned up
         for char in self.bad_token_chars:
             self.api_token = self.api_token.replace(char, '')
-
-        self.player_tag = self.ensure_player_tag(player_tag)
 
     # setup Bearer token auth headers
     def set_request_headers(self):
@@ -76,24 +75,18 @@ class CrClient:
         return all_tokens
 
     def url_encode_string(self, string: str):
-        return requests.utils.quote(string)
-
-    def ensure_player_tag(self, player_tag: str):
-        if player_tag is None and self.player_tag is None:
-            raise SystemExit("ERROR: must supply player_tag for lookup!")
-        elif player_tag is None:
-            return self.player_tag
-        else:
-            return player_tag
+        return requests.utils.quote(str(string))
 
     def get_last_battle_info(self, player_tag: str = None):
-        player_tag = self.ensure_player_tag(player_tag=player_tag)
 
         response = self.get_player_battle_log(player_tag=player_tag)
-        return response[0]
+        try:
+            return response[0]
+        except KeyError:
+            print("CrClient: ERROR: Couldn't get last battle for player_tag: {}".format(player_tag))
+            return None
 
     def get_time_since_last_battle(self, player_tag: str = None):
-        player_tag = self.ensure_player_tag(player_tag=player_tag)
 
         response = self.get_player_battle_log(player_tag=player_tag)
         last_battle_time = parser.parse((response[0]["battleTime"]))
@@ -101,8 +94,12 @@ class CrClient:
         elapsed_time = current_time - last_battle_time
         return elapsed_time
 
+    def get_last_battle_time(self, player_tag: str = None):
+
+        last_battle = Battle(self.get_last_battle_info(player_tag=player_tag))
+        return last_battle.get_battle_time()
+
     def get_player_battle_log(self, player_tag: str = None):
-        player_tag = self.ensure_player_tag(player_tag=player_tag)
 
         player_tag = self.url_encode_string(player_tag)
         url = self.base_url + self.players_string + player_tag + self.battle_log_string
@@ -110,7 +107,6 @@ class CrClient:
         return response.json()
 
     def get_player_info(self, player_tag: str = None):
-        player_tag = self.ensure_player_tag(player_tag=player_tag)
 
         player_tag = self.url_encode_string(player_tag)
         url = self.base_url + self.players_string + player_tag
@@ -124,7 +120,6 @@ class CrClient:
         return response.json()
 
     def get_player_upcoming_chests(self, player_tag: str = None):
-        player_tag = self.ensure_player_tag(player_tag=player_tag)
 
         player_tag = self.url_encode_string(player_tag)
         url = self.base_url + self.players_string + player_tag + self.upcoming_chests_string
