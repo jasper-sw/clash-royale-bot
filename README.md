@@ -20,7 +20,7 @@ my_token=[sample_token]
 
 my_other_token=[sample_token2]
 ```
-## The following steps are only necessary if you want to text people messages about their clash games
+## The following steps are only necessary if you want to send people text messages about their clash games
 - create another folder called 'twilio_config/' in the root directory and include a file called 'twilio_config/twilio.txt' in that directory. In that file you need to include your twilio account details if you want to text people. Format the file as follows:
 ```
 SID: [your twilio SID]
