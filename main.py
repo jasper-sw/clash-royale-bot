@@ -3,22 +3,23 @@ from entity_classes.battle import Battle
 import time
 from clash_bot import ClashBot
 from cr_client import CrClient
+import json
 
 cb = ClashBot()
 cr = CrClient(api_token_file='token_config/api-tokens.txt')
-jasper = Person(cell_number=8015108393, player_tag="#LCJ8RPLPR", name="Jasper")
-jasper.last_battle_time = cr.get_last_battle_time(player_tag=jasper.player_tag)
-john = Person(cell_number=8017122161, player_tag="#Y08P2PRLP", name="John")
-john.last_battle_time = cr.get_last_battle_info(player_tag=john.player_tag)
-hayden = Person(cell_number=3852144611, player_tag="#QJQU0J89C", name="Hayden")
-hayden.last_battle_time = cr.get_last_battle_info(player_tag=hayden.player_tag)
-justin = Person(cell_number=8019277910, player_tag="#QJVPGPLGG", name="Justin")
-justin.last_battle_time = cr.get_last_battle_info(player_tag=justin.player_tag)
 
+# open people config file and get player tags, numbers, names
+with open('people.txt') as file:
+    lines = file.readlines()
+data = json.loads(str(lines[0]))
+people_dict = dict(data)
 
-# people = [jasper, john, hayden, justin]
-people = [jasper]
-
+# create list of people
+people = []
+for person in people_dict.keys():
+    curr_person = Person(cell_number=people_dict[person]["cell_number"], player_tag=people_dict[person]["tag"], name=person)
+    curr_person.last_battle_time = cr.get_last_battle_time(player_tag=curr_person.player_tag)
+    people.append(curr_person)
 
 not_done = True
 print("Starting ClashBot")
