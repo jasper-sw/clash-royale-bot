@@ -1,4 +1,6 @@
 
+# this class allows easy access to the many card details available for a given card
+#   from the supercell clash royale api
 class Card:
     name: str
     card_id: int
@@ -8,6 +10,8 @@ class Card:
     icon_urls: dict
     original_card_dict: dict
 
+    # this default constructor takes a dictionary formatted in the same way the supercell api
+    #   returns details for a card
     def __init__(self, card_dict):
         self.name = card_dict["name"]
         self.card_id = card_dict["id"]

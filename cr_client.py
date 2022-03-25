@@ -7,6 +7,7 @@ from datetime import datetime, timezone
 import os
 
 
+# this class allows us to easily interface with the official supercell clash royale api
 class CrClient:
     # the working/current api token
     api_token: str
@@ -42,6 +43,8 @@ class CrClient:
         self.headers["Accept"] = "application/json"
         self.headers["Authorization"] = ("Bearer {}".format(self.api_token))
 
+    # run through the list of tokens in the token config file and find one that works. This is potentially
+    #   useful because supercell forces you to create a non-mutable list of ip addresses for each api token you create
     def find_working_token(self):
         for key in self.api_token_dict.keys():
             curr_token = self.api_token_dict[key]
@@ -53,8 +56,8 @@ class CrClient:
                 return
         raise SystemExit("CrClient: ERROR: Unable to find a working api token in the config file!")
 
+    # get all api tokens from the config file at token_config/api-tokens.txt
     def get_tokens_from_config(self, token_config_path: str):
-
         if not os.path.exists(token_config_path):
             raise SystemExit("CrClient: ERROR: Token config filepath does not exist!")
 
@@ -74,11 +77,12 @@ class CrClient:
 
         return all_tokens
 
+    # url encode player tags
     def url_encode_string(self, string: str):
         return requests.utils.quote(str(string))
 
+    # this function returns the details for the last battle in a players battle log given a player tag
     def get_last_battle_info(self, player_tag: str = None):
-
         response = self.get_player_battle_log(player_tag=player_tag)
         try:
             return response[0]
@@ -87,27 +91,24 @@ class CrClient:
             return None
 
     def get_time_since_last_battle(self, player_tag: str = None):
-
         response = self.get_player_battle_log(player_tag=player_tag)
         last_battle_time = parser.parse((response[0]["battleTime"]))
         current_time = datetime.now(timezone.utc)
         elapsed_time = current_time - last_battle_time
         return elapsed_time
 
+    # return the time that the last battle took place for a player given their player tag
     def get_last_battle_time(self, player_tag: str = None):
-
         last_battle = Battle(self.get_last_battle_info(player_tag=player_tag))
         return last_battle.get_battle_time()
 
     def get_player_battle_log(self, player_tag: str = None):
-
         player_tag = self.url_encode_string(player_tag)
         url = self.base_url + self.players_string + player_tag + self.battle_log_string
         response = requests.get(url=url, headers=self.headers)
         return response.json()
 
     def get_player_info(self, player_tag: str = None):
-
         player_tag = self.url_encode_string(player_tag)
         url = self.base_url + self.players_string + player_tag
         response = requests.get(url=url, headers=self.headers)

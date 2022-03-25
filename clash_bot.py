@@ -1,7 +1,9 @@
 import random
 
 
+# this class contains variables and logic for texting annoying messages to friends after they play clash games
 class ClashBot:
+    # messages to send players based on whether they lose or win, and how many crowns they get
     one_crown_loss_messages = ["[ClashBot] 1 crown... L bro",
                                "[ClashBot] 1 crown bro... gotta do better"]
 
@@ -25,6 +27,7 @@ class ClashBot:
     def __init__(self):
         pass
 
+    # randomly return a crown loss message based on crowns won
     def crown_loss_message(self, crown_count: int):
         if crown_count == 0:
             num = random.randint(0, (len(self.zero_crown_loss_messages) - 1))
@@ -36,6 +39,7 @@ class ClashBot:
             num = random.randint(0, (len(self.two_crown_loss_messages) - 1))
             return self.two_crown_loss_messages[num]
 
+    # randomly return a crown win message based on crowns won
     def crown_win_message(self, crown_count: int):
         if crown_count == 1:
             num = random.randint(0, (len(self.one_crown_win_messages) - 1))

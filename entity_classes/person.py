@@ -1,8 +1,9 @@
-from cr_client import CrClient
 from send_text import SmsAlert
 import datetime
 
 
+# this class allows us to store details for a person like name, player_tag, and phone number which we can use to
+#   text them annoying and degrading messages in the real world when they lose games in clash royale
 class Person:
     player_tag: str
     text_client: SmsAlert

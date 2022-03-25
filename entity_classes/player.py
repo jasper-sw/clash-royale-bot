@@ -1,6 +1,7 @@
 from entity_classes.deck import Deck
 
 
+# this class allows us to easily store clash royale player details, and a players deck as a deck object
 class Player:
     username: str
     player_tag: str

@@ -35,6 +35,7 @@ class SmsAlert:
         print("Recipient: {}\nSender: {}\nSID: {}\nToken: {}\nConfig file: {}".format
               (self.recipient, self.sender, self.sid, self.token, self.config_path))
 
+    # ensure we have the necessary twilio variables to continue
     def fully_configured(self):
         if self.config_path == "":
             return False
@@ -47,6 +48,7 @@ class SmsAlert:
 
         return True
 
+    # get twilio config variables from twilio_config/twilio.txt
     def import_config(self):
         with open(self.config_path) as file:
             for line in file:

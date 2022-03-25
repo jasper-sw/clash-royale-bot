@@ -3,6 +3,7 @@ import datetime
 from dateutil import tz
 
 
+# this class allows easy access to the many battle details available for a battle from the supercell clash royale api
 class Battle:
     battle_type: str
     battle_time: str
@@ -44,6 +45,7 @@ class Battle:
             self.opponent.append(player)
 
         self.is_hosted_match = battle_dict["isHostedMatch"]
+        # store the original response from the supercell api for later use
         self.original_battle_dict = battle_dict
 
     def __str__(self):
@@ -69,6 +71,7 @@ class Battle:
     def __repr__(self):
         return self.__str__()
 
+    # return the crowns won for a given player based on their player tag
     def get_player_crowns(self, player_tag: str):
         all_battle_stats = []
         all_battle_stats.extend(self.team_battle_stats)
@@ -79,21 +82,25 @@ class Battle:
 
         return None
 
+    # get the home team crown count
     def get_player_team_crowns(self):
         total_crowns = 0
         for entry in self.team_battle_stats:
             total_crowns += entry["crowns"]
         return total_crowns
 
+    # get the away team crown count
     def get_opponent_team_crowns(self):
         total_crowns = 0
         for entry in self.opponent_battle_stats:
             total_crowns += entry["crowns"]
         return total_crowns
 
+    # cast the UTC ISO 8601 time from supercell cr api to datetime object and return it
     def get_battle_time(self):
         return datetime.datetime.strptime(self.battle_time, "%Y%m%dT%H%M%S.%fZ")
 
+    # return a battle time in very human readable 12 hour local time
     def get_battle_time_12_hour_local(self):
         from_zone = tz.gettz('UTC')
         to_zone = tz.tzlocal()
@@ -103,6 +110,7 @@ class Battle:
         battle_time = battle_time.strftime("%I:%M %p")
         return battle_time
 
+    # get home team win status, returns true if they won
     def get_team_win_status(self):
         player_team_crowns = self.get_player_team_crowns()
         opponent_team_crowns = self.get_opponent_team_crowns()
