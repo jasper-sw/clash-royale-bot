@@ -28,7 +28,8 @@ while not_done:
 
     for homie in people:
         time.sleep(1)
-        recent_battle = Battle(battle_dict=cr.get_last_battle_info(player_tag=homie.player_tag))
+        battle_dict = cr.get_last_battle_info(player_tag=homie.player_tag)
+        recent_battle = Battle(battle_dict=battle_dict)
         recent_battle_time = recent_battle.get_battle_time()
         last_battle_time = homie.last_battle_time
         elapsed = recent_battle_time - last_battle_time
@@ -37,6 +38,7 @@ while not_done:
         # print("total seconds: {}".format(elapsed.total_seconds()))
 
         if (elapsed.total_seconds() != 0) and (homie.last_battle_time != recent_battle_time):
+            print(battle_dict)
             crowns = recent_battle.get_player_team_crowns()
             win_status = recent_battle.get_team_win_status()
 
@@ -44,7 +46,6 @@ while not_done:
             message = cb.crown_message(crown_count=crowns, win=win_status)
             print("win status: {}, crown count: {}".format(win_status, crowns))
             homie.send_message(message=message)
-            print("Send message: [\'{}\'] to {} at number: {}\n".format(message, homie.name, homie.cell_number))
             homie.last_battle_time = recent_battle_time
 
 

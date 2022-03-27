@@ -1,4 +1,5 @@
 from send_text import SmsAlert
+import twilio.base.exceptions
 import datetime
 
 
@@ -37,4 +38,11 @@ class Person:
         return self.player_tag
 
     def send_message(self, message):
-        self.text_client.send_message(message=message)
+        try:
+            self.text_client.send_message(message=message)
+            print("Sent message: [\'{}\'] to {} at number: {}\n".format(message, self.name, self.cell_number))
+        except twilio.base.exceptions.TwilioRestException as e:
+            print("Person: ERROR: Unable to send text to: {} at number: {} with message: {}".format(self.name,
+                                                                                                    self.cell_number,
+                                                                                                    message))
+            print(e)
