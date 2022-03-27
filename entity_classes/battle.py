@@ -86,14 +86,22 @@ class Battle:
     def get_player_team_crowns(self):
         total_crowns = 0
         for entry in self.team_battle_stats:
-            total_crowns += entry["crowns"]
+            try:
+                total_crowns += entry["crowns"]
+            # if any member of the team has no entry for crowns, add none to the total
+            except KeyError:
+                pass
         return total_crowns
 
     # get the away team crown count
     def get_opponent_team_crowns(self):
         total_crowns = 0
         for entry in self.opponent_battle_stats:
-            total_crowns += entry["crowns"]
+            try:
+                total_crowns += entry["crowns"]
+            # if any member of the team has no entry for crowns, add none to the total
+            except KeyError:
+                pass
         return total_crowns
 
     # cast the UTC ISO 8601 time from supercell cr api to datetime object and return it
