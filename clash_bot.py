@@ -8,7 +8,7 @@ class ClashBot:
                                "[ClashBot] 1 crown bro... gotta do better",
                                "[ClashBot] Hey at least you got 1 tower!",
                                "[ClashBot] Could have been worse, you could have got 0 crowns",
-                               "[ClashBot] Matchmaking is rigged bro!"
+                               "[ClashBot] Matchmaking is rigged bro!",
                                "[ClashBot] L+RATIO RIP BOZO",
                                "[ClashBot] LMAO"]
 
